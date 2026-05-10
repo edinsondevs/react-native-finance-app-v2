@@ -1,3 +1,4 @@
+import { useToogleVisualization } from "@/store/useToogleVisualization";
 import { colors } from "@/styles/constants";
 import React from "react";
 import { Text, View } from "react-native";
@@ -7,6 +8,8 @@ const GastosXdia = ({
 }: {
 	gastosPorDiaSummary: Record<string, number>;
 }) => {
+	const { toogleVisualization } = useToogleVisualization();
+	
 	return (
 		<View className='bg-white rounded-2xl p-4 shadow-sm'>
 			<Text className='text-base font-semibold text-gray-500 mb-4'>
@@ -25,7 +28,7 @@ const GastosXdia = ({
 							<Text
 								className='text-lg font-bold'
 								style={{ color: colors.primary }}>
-								${monto.toLocaleString("es-AR")}
+								${toogleVisualization ? monto.toLocaleString("es-AR") : "*****"}
 							</Text>
 						</View>
 					))

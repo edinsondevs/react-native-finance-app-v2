@@ -11,6 +11,7 @@ import {
 
 import { CustomBarChart, HeaderComponent } from "@/components";
 import { useHistorialScreenLogic } from "@/hooks/useHistorialScreenLogic";
+import { useToogleVisualization } from "@/store/useToogleVisualization";
 import { colors } from "@/styles/constants";
 import { styles } from "@/styles/estadisticas.styles";
 
@@ -33,6 +34,8 @@ const HistorialScreen = () => {
 		profileMap,
 		user,
 	} = useHistorialScreenLogic();
+
+	const {toogleVisualization} = useToogleVisualization();
 
 	const balance = totalIncomeYear - totalYear;
 
@@ -112,7 +115,7 @@ const HistorialScreen = () => {
 						]}
 						numberOfLines={1}
 						adjustsFontSizeToFit>
-						${totalIncomeYear.toLocaleString("es-AR")}
+						${toogleVisualization ? totalIncomeYear.toLocaleString("es-AR") : "*****"}
 					</Text>
 				</View>
 				<View
@@ -139,7 +142,7 @@ const HistorialScreen = () => {
 						]}
 						numberOfLines={1}
 						adjustsFontSizeToFit>
-						${totalYear.toLocaleString("es-AR")}
+						${toogleVisualization ? totalYear.toLocaleString("es-AR") : "*****"}
 					</Text>
 				</View>
 			</View>
@@ -151,7 +154,7 @@ const HistorialScreen = () => {
 						styles.totalAmount,
 						{ color: balance >= 0 ? "#10b981" : "#ef4444" },
 					]}>
-					${balance.toLocaleString("es-AR")}
+					${toogleVisualization ? balance.toLocaleString("es-AR") : "*****"}
 				</Text>
 			</View>
 

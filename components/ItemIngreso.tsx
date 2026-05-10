@@ -11,6 +11,7 @@ import { useFormatoMoneda, useIngresosMutations } from "@/hooks";
 
 // ✅ IMPORTAR DIRECTAMENTE, NO DESDE components/index.ts
 import ModalEdicionIngreso from "./ModalEdicionIngreso";
+import { useToogleVisualization } from "@/store/useToogleVisualization";
 
 /**
  * @component ItemIngreso
@@ -41,6 +42,7 @@ const ItemIngreso = ({
 		fecha ? dayjs(fecha).toDate() : new Date(),
 	);
 	const { user } = useAuthStore();
+	const { toogleVisualization } = useToogleVisualization();
 
 	// Actualizar el estado local cuando cambian los props (tras el refetch de React Query)
 	useEffect(() => {
@@ -92,7 +94,7 @@ const ItemIngreso = ({
 						{/* Monto y Acción */}
 						<View className='items-end gap-1'>
 							<Text className='font-Inter-Bold text-xl text-green-600'>
-								+ {useFormatoMoneda(monto)}
+								{ toogleVisualization ? "+ " + useFormatoMoneda(monto) : "*****"}
 							</Text>
 							<FontAwesome
 								name='chevron-right'

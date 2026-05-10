@@ -22,12 +22,15 @@ import useCapitalize from "@/hooks/useCapitalize";
 import { useEstadisticasScreenLogic } from "@/hooks/useEstadisticasScreenLogic";
 import { colors } from "@/styles/constants";
 import { styles } from "@/styles/estadisticas.styles";
+import { useToogleVisualization } from "@/store/useToogleVisualization";
 
 /**
  * Pantalla de Análisis Estadístico de Gastos.
  * Despliega gráficos interactivos, tendencias y distribuciones por diversos criterios.
  */
 const EstadisticasScreen = () => {
+	const { toogleVisualization } = useToogleVisualization();
+
 	// 🔌 Desacoplamiento de lógica (SOLID)
 	const {
 		activeTab,
@@ -86,7 +89,7 @@ const EstadisticasScreen = () => {
 			<View style={styles.totalCard}>
 				<Text style={styles.totalLabel}>Total del Mes</Text>
 				<Text style={[styles.totalAmount, { color: colors.primary }]}>
-					${total.toLocaleString("es-AR")}
+					{toogleVisualization ? "$" + total.toLocaleString("es-AR") : "*****"}
 				</Text>
 			</View>
 

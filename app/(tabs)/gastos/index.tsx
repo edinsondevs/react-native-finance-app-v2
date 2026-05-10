@@ -26,6 +26,7 @@ import { DatePickerModal } from "@/components/form-fields";
 import { useFormatoMoneda } from "@/hooks";
 import { useGastosScreenLogic } from "@/hooks/useGastosScreenLogic";
 import { colors } from "@/styles/constants";
+import { useToogleVisualization } from "@/store/useToogleVisualization";
 
 /**
  * Pantalla principal de Gestión de Gastos.
@@ -33,7 +34,7 @@ import { colors } from "@/styles/constants";
  */
 const GastosScreen = () => {
 	const [datePickerVisible, setDatePickerVisible] = useState(false);
-
+	const {toogleVisualization} = useToogleVisualization();
 	// ⚡️ Desacoplamiento de lógica (SOLID - Single Responsibility)
 	const {
 		saludo,
@@ -118,7 +119,7 @@ console.log(gastosTdcTotal);
 										{isLoadingResumeIngresos ? (
 											<ActivityIndicator />
 										) : (
-											useFormatoMoneda(resumeIngresos)
+											toogleVisualization ? useFormatoMoneda(resumeIngresos) : "*****"
 										)}
 									</Text>
 								</CardsComponent>
@@ -139,7 +140,7 @@ console.log(gastosTdcTotal);
 										<Text className='text-xl'>Gastos</Text>
 									</View>
 									<Text className='font-Nunito-Bold text-alert w-full text-center'>
-										{useFormatoMoneda(gastosFiltradosTotal)}
+										{toogleVisualization ? useFormatoMoneda(gastosFiltradosTotal) : "*****"}
 									</Text>
 								</CardsComponent>
 							</View>
@@ -155,7 +156,7 @@ console.log(gastosTdcTotal);
 										<Text className='text-xl'>Tarjeta Crédito</Text>
 									</View>
 									<Text className='font-Nunito-Bold text-alert'>
-										{useFormatoMoneda(gastosTdcTotal)}
+										{toogleVisualization ? useFormatoMoneda(gastosTdcTotal) : "*****"}
 									</Text>
 								</CardsComponent>
 							</View>

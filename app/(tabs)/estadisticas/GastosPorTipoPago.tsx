@@ -1,3 +1,4 @@
+import { useToogleVisualization } from "@/store/useToogleVisualization";
 import { colors } from "@/styles/constants";
 import React from "react";
 import { Text, View } from "react-native";
@@ -11,6 +12,7 @@ interface GastosPorTipoPagoProps {
 }
 
 const GastosPorTipoPago = ({ data }: GastosPorTipoPagoProps) => {
+	const { toogleVisualization } = useToogleVisualization();
 	return (
 		<View className='bg-white rounded-2xl p-4 shadow-sm'>
 			<Text className='text-base font-semibold text-gray-500 mb-4'>
@@ -35,7 +37,7 @@ const GastosPorTipoPago = ({ data }: GastosPorTipoPagoProps) => {
 							<Text
 								className='text-lg font-bold'
 								style={{ color: colors.primary }}>
-								${(item.monto || 0).toLocaleString("es-AR")}
+								${toogleVisualization ? (item.monto || 0).toLocaleString("es-AR") : "*****"}
 							</Text>
 						</View>
 					))

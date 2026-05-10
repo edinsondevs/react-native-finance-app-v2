@@ -1,3 +1,4 @@
+import { useToogleVisualization } from "@/store/useToogleVisualization";
 import React from "react";
 import { Dimensions, Text, View } from "react-native";
 import { PieChart } from "react-native-gifted-charts";
@@ -13,6 +14,9 @@ interface PieChartComponentProps {
 const screenWidth = Dimensions.get("window").width;
 
 const PieChartComponent = ({ data }: PieChartComponentProps) => {
+
+	const { toogleVisualization } = useToogleVisualization();
+
 	const total = data.reduce((acc, item) => acc + item.monto, 0);
 
 	const pieData = data.map((item) => ({
@@ -50,7 +54,7 @@ const PieChartComponent = ({ data }: PieChartComponentProps) => {
 									color: "black",
 									fontWeight: "bold",
 								}}>
-								${total.toLocaleString("es-AR")}
+								${toogleVisualization ? total.toLocaleString("es-AR") : "*****"}
 							</Text>
 							<Text style={{ fontSize: 12, color: "gray" }}>
 								Total
@@ -91,7 +95,7 @@ const PieChartComponent = ({ data }: PieChartComponentProps) => {
 								fontWeight: "bold",
 								color: "#1f2937",
 							}}>
-							${item.monto.toLocaleString("es-AR")}
+							${toogleVisualization ? item.monto.toLocaleString("es-AR") : "*****"}
 						</Text>
 					</View>
 				))}

@@ -9,6 +9,7 @@ import { useFormatoMoneda, useGastosMutations } from "@/hooks";
 import { InterfaceMovimientosRecientesProps } from "@/interfaces";
 import { useAuthStore } from "@/store/useAuthStore";
 import ModalEdicionMovimiento from "./ModalEdicionMovimiento";
+import { useToogleVisualization } from "@/store/useToogleVisualization";
 
 dayjs.locale("es");
 
@@ -39,7 +40,7 @@ const MovimientosRecientes = ({
 		categoria_id ? categoria_id.toString() : "",
 	);
 	const { user } = useAuthStore();
-
+	const { toogleVisualization } = useToogleVisualization();
 	// Usar el custom hook para las mutaciones
 	const { updateMutation, deleteMutation } = useGastosMutations({
 		id,
@@ -92,7 +93,7 @@ const MovimientosRecientes = ({
 						{/* Monto y Acción */}
 						<View className='items-end gap-1'>
 							<Text className='font-Inter-Bold text-xl text-red-600'>
-								- {useFormatoMoneda(monto)}
+								{toogleVisualization ? "- " + useFormatoMoneda(monto) : "*****"}
 							</Text>
 							<FontAwesome
 								name='chevron-right'

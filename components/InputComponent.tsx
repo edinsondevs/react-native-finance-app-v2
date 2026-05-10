@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import FontAwesome from "@expo/vector-icons/FontAwesome"; 
 
 import { formatCurrency, handleChangeText } from "@/helpers";
 import { InterfaceInputComponentProps } from "@/interfaces";
