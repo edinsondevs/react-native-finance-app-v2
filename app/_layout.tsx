@@ -12,6 +12,8 @@ import {
 } from "react-native-safe-area-context";
 import "../global.css";
 
+import { useAuthStore } from "../store/useAuthStore";
+
 // Configurar dayjs a español globalmente
 dayjs.locale("es");
 
@@ -20,6 +22,8 @@ SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
+	const initializeAuth = useAuthStore((state) => state.initializeAuth);
+
 	// 1. Llama al hook useFonts y mapea un nombre a la ruta del archivo.
 	const [fontsLoaded] = useFonts({
 		"Inter_18pt-Bold": require("../assets/fonts/Inter_18pt-Bold.ttf"),
@@ -39,6 +43,10 @@ export default function RootLayout() {
 		"Rubik-SemiBold": require("../assets/fonts/Rubik-SemiBold.ttf"),
 		// Añade aquí todas las variaciones de fuente que planeas usar.
 	});
+
+	useEffect(() => {
+		initializeAuth();
+	}, []);
 
 	useEffect(() => {
 		if (fontsLoaded) {

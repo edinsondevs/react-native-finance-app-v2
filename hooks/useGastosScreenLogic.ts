@@ -20,6 +20,8 @@ export const useGastosScreenLogic = () => {
 		isLoadingResumeGastos,
 		allGastos,
 		isLoadingAllGastos,
+		gastosTarjetaCredito,
+		isLoadingGastosTarjetaCredito,
 		refreshAll,
 	} = useDashboardData();
 
@@ -101,6 +103,11 @@ export const useGastosScreenLogic = () => {
 		0,
 	);
 
+	/**
+	 * Sumatoria total de los gastos que están visibles actualmente
+	 */
+	const gastosTdcTotal = gastosTarjetaCredito;
+
 	return {
 		saludo,
 		displayName,
@@ -116,6 +123,7 @@ export const useGastosScreenLogic = () => {
 		handleCategoriaChange,
 		handleMetodoPagoChange,
 		gastosFiltradosTotal,
+		gastosTdcTotal,
 		selectedFecha,
 		handleFechaChange,
 	};

@@ -100,3 +100,41 @@ export const getAllGastosServices = async (
 		throw error;
 	}
 };
+
+/**
+ * Obtiene el resumen total de gastos de tarjetas de crédito para un mes específico.
+ * Calcula el rango del mes actual para obtener la sumatoria de montos.
+ *
+ * @param month - Objeto dayjs que representa el mes a consultar.
+ * @returns Promesa con el monto total de gastos de tarjetas de crédito.
+ */
+export const getResumeGastosTdcServices = async (
+	month: dayjs.Dayjs,
+): Promise<number> => {
+	const fechaActual = month.endOf("month").format("YYYY-MM-DD");
+	const fechaAnterior = month
+		.subtract(1, "month")
+		.endOf("month")
+		.format("YYYY-MM-DD");
+
+	try {
+		// Asumiendo que la tabla de gastos tiene una columna 'monto' y 'metodo_pago_id'
+		// Necesitarás ajustar el endpoint según tu schema real (ej: incluir filtros por tarjeta_credito_id si existe)
+		const response = await instance.get<MontoItem[]>(
+			`/gastos?fecha=gt.${fechaAnterior}&fecha=lte.${fechaActual}&metodo_pago_id=eq.2`,
+			{
+				params: {
+					select: "monto",
+				},
+			},
+		);
+		const data = response.data;
+		const total = data.reduce(
+			(acc: number, item: MontoItem) => acc + item.monto,
+			0,
+		);
+		return total;
+	} catch (error) {
+		throw error;
+	}
+};

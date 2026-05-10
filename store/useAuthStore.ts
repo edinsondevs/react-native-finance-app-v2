@@ -10,6 +10,7 @@ export type User = {
 type AuthStore = {
 	user: User;
 	loading: boolean;
+	status: "checking" | "authenticated" | "unauthenticated";
 	error: string | null;
 	signUp: (
 		email: string,
@@ -19,6 +20,7 @@ type AuthStore = {
 	signIn: (email: string, password: string) => Promise<void>;
 	signOut: () => Promise<void>;
 	fetchSession: () => Promise<void>;
+	initializeAuth: () => void;
 };
 
 /**
@@ -28,7 +30,28 @@ type AuthStore = {
 export const useAuthStore = create<AuthStore>((set) => ({
 	user: null,
 	loading: false,
+	status: "checking",
 	error: null,
+
+	/**
+	 * Configura el listener de cambios de autenticación de Supabase.
+	 */
+	initializeAuth: () => {
+		supabase.auth.onAuthStateChange((_event, session) => {
+			if (session?.user) {
+				set({
+					user: {
+						id: session.user.id,
+						email: session.user.email!,
+						displayName: session.user.user_metadata?.full_name,
+					},
+					status: "authenticated",
+				});
+			} else {
+				set({ user: null, status: "unauthenticated" });
+			}
+		});
+	},
 
 	/**
 	 * Registra un nuevo usuario en Supabase con correo, contraseña y nombre visible.
@@ -54,6 +77,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
 							displayName: data.user.user_metadata.full_name,
 						}
 					: null,
+				status: data.user ? "authenticated" : "unauthenticated",
 			});
 		set({ loading: false });
 	},
@@ -79,6 +103,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
 							displayName: data.user.user_metadata?.full_name,
 						}
 					: null,
+				status: data.user ? "authenticated" : "unauthenticated",
 			});
 		set({ loading: false });
 	},
@@ -88,7 +113,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
 	 */
 	signOut: async () => {
 		await supabase.auth.signOut();
-		set({ user: null });
+		set({ user: null, status: "unauthenticated" });
 	},
 
 	/**
@@ -103,7 +128,10 @@ export const useAuthStore = create<AuthStore>((set) => ({
 					email: data.session.user.email!,
 					displayName: data.session.user.user_metadata?.full_name,
 				},
+				status: "authenticated",
 			});
+		} else {
+			set({ status: "unauthenticated" });
 		}
 	},
 }));

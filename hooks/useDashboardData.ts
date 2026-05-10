@@ -1,6 +1,7 @@
 import {
 	getAllGastosServices,
 	getResumeGastosServices,
+	getResumeGastosTdcServices,
 	getResumeIngresosServices,
 } from "@/api/services/dashboard/get.alls.services";
 import { useFinanceStore } from "@/store/useFinanceStore";
@@ -46,10 +47,20 @@ export const useDashboardData = () => {
 		queryFn: () => getAllGastosServices(selectedMonth),
 	});
 
+	const {
+		data: gastosTarjetaCredito,
+		isLoading: isLoadingGastosTarjetaCredito,
+		refetch: refetchGastosTarjetaCredito,
+	} = useQuery({
+		queryKey: ["gastosTarjetaCredito", selectedMonth.format("YYYY-MM")],
+		queryFn: () => getResumeGastosTdcServices(selectedMonth),
+	});
+
 	const refreshAll = () => {
 		refetchAllGastos();
 		refetchResumeGastos();
 		refetchResumeIngresos();
+		refetchGastosTarjetaCredito();
 	};
 
 	return {
@@ -59,6 +70,8 @@ export const useDashboardData = () => {
 		isLoadingResumeGastos,
 		allGastos,
 		isLoadingAllGastos,
+		gastosTarjetaCredito,
+		isLoadingGastosTarjetaCredito,
 		refreshAll,
 	};
 };

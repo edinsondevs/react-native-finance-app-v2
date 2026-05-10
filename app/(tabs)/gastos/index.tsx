@@ -52,8 +52,9 @@ const GastosScreen = () => {
 		gastosFiltradosTotal,
 		selectedFecha,
 		handleFechaChange,
+		gastosTdcTotal,
 	} = useGastosScreenLogic();
-
+console.log(gastosTdcTotal);
 	return (
 		<View className='flex-1'>
 			{/* Lista Principal de Movimientos */}
@@ -101,9 +102,7 @@ const GastosScreen = () => {
 						<MonthSelector />
 
 						{/* Tarjetas resumen: Ingresos y Gastos filtrados */}
-						<View className='flex flex-row justify-around '>
-							{/* Card de Ingresos */}
-							<View className='w-6/12'>
+							<View className='w-12/12'>
 								<CardsComponent className='gap-1 items-center'>
 									<View className='flex flex-row items-center'>
 										<MaterialIcons
@@ -124,11 +123,13 @@ const GastosScreen = () => {
 									</Text>
 								</CardsComponent>
 							</View>
+						<View className='flex flex-row justify-around '>
+							{/* Card de Ingresos */}
 
 							{/* Card de Gastos */}
 							<View className='w-6/12'>
 								<CardsComponent className='gap-1 items-center'>
-									<View className='flex flex-row items-center'>
+									<View className='flex flex-row items-center justify-center w-full'>
 										<MaterialIcons
 											name='arrow-downward'
 											size={24}
@@ -137,8 +138,24 @@ const GastosScreen = () => {
 										/>
 										<Text className='text-xl'>Gastos</Text>
 									</View>
-									<Text className='font-Nunito-Bold text-alert'>
+									<Text className='font-Nunito-Bold text-alert w-full text-center'>
 										{useFormatoMoneda(gastosFiltradosTotal)}
+									</Text>
+								</CardsComponent>
+							</View>
+							<View className='w-6/12'>
+								<CardsComponent className='gap-1 items-center'>
+									<View className='flex flex-row items-center'>
+										<FontAwesome
+											name='credit-card'
+											size={24}
+											color={colors.alert}
+											className='bg-alert/10 p-1 rounded-full mr-4'
+										/>
+										<Text className='text-xl'>Tarjeta Crédito</Text>
+									</View>
+									<Text className='font-Nunito-Bold text-alert'>
+										{useFormatoMoneda(gastosTdcTotal)}
 									</Text>
 								</CardsComponent>
 							</View>
