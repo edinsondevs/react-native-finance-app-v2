@@ -55,7 +55,7 @@ const GastosScreen = () => {
 		handleFechaChange,
 		gastosTdcTotal,
 	} = useGastosScreenLogic();
-console.log(gastosTdcTotal);
+
 	return (
 		<View className='flex-1'>
 			{/* Lista Principal de Movimientos */}
@@ -111,7 +111,7 @@ console.log(gastosTdcTotal);
 											size={24}
 											className='text-secondary bg-secondary/10 p-1 rounded-full mr-4'
 										/>
-										<Text className='text-xl'>
+										<Text className='text-lg'>
 											Ingresos
 										</Text>
 									</View>
@@ -137,7 +137,7 @@ console.log(gastosTdcTotal);
 											color={colors.alert}
 											className='bg-alert/10 p-1 rounded-full mr-4'
 										/>
-										<Text className='text-xl'>Gastos</Text>
+										<Text className='text-lg'>Gastos</Text>
 									</View>
 									<Text className='font-Nunito-Bold text-alert w-full text-center'>
 										{toogleVisualization ? useFormatoMoneda(gastosFiltradosTotal) : "*****"}
@@ -153,7 +153,7 @@ console.log(gastosTdcTotal);
 											color={colors.alert}
 											className='bg-alert/10 p-1 rounded-full mr-4'
 										/>
-										<Text className='text-xl'>Tarjeta Crédito</Text>
+										<Text className='text-lg'>Gastos TC</Text>
 									</View>
 									<Text className='font-Nunito-Bold text-alert'>
 										{toogleVisualization ? useFormatoMoneda(gastosTdcTotal) : "*****"}
