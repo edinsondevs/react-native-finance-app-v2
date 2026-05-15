@@ -22,12 +22,14 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png",
+      "bundler": "metro"
     },
-    "expo": {
-      "web": {
-        "bundler": "metro"
-      }
+    "updates": {
+      "url": "https://u.expo.dev/a7ee85c4-0c43-44dd-90b9-cf6e2e2bd9e2"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     },
     "splash": {
       "image": "./assets/images/favicon.png",
@@ -36,6 +38,7 @@
     },
     "plugins": [
       "expo-router",
+      "expo-updates",
       [
         "expo-splash-screen",
         {
