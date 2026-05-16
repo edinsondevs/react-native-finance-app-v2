@@ -9,7 +9,6 @@ import { useToogleVisualization } from "@/store/useToogleVisualization";
 import { usePathname } from "expo-router";
 import { useAuthStore } from "@/store/useAuthStore";
 import { uploadAvatarService } from "@/api/services/usuarios/profile.service";
-import { colors } from "@/styles/constants";
 
 const HeaderComponent = ({ title, icon = false }: InterfaceHeaderComponentProps) => {
 	const { toogleVisualization, setToogleVisualization } = useToogleVisualization();
@@ -149,7 +148,7 @@ const HeaderComponent = ({ title, icon = false }: InterfaceHeaderComponentProps)
 									</Pressable>
 									<Pressable 
 										onPress={handlePickImage}
-										className="flex-1 bg-secondary py-3 rounded-xl items-center"
+										className="flex-1 bg-[#28a745] py-3 rounded-xl items-center"
 									>
 										<Text className="text-white font-bold">Cambiar</Text>
 									</Pressable>
