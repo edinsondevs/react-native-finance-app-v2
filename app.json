@@ -26,7 +26,9 @@
       "bundler": "metro"
     },
     "updates": {
-      "url": "https://u.expo.dev/a7ee85c4-0c43-44dd-90b9-cf6e2e2bd9e2"
+      "url": "https://u.expo.dev/a7ee85c4-0c43-44dd-90b9-cf6e2e2bd9e2",
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 30000
     },
     "runtimeVersion": {
       "policy": "appVersion"

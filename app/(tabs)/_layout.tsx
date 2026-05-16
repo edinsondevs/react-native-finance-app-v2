@@ -23,7 +23,7 @@ export default function TabLayout() {
 					headerStyle: {
 						height: 80,
 					},
-					title: "Gastos 💸",
+					title: "Gastos",
 					tabBarIcon: ({ color }) => (
 						<FontAwesome
 							size={28}

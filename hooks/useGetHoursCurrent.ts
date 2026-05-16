@@ -14,11 +14,11 @@ export function useGetHoursCurrent() {
 
 	const horaActual = dayjs().tz(MI_ZONA).hour();
 	if (horaActual >= 6 && horaActual < 12) {
-		saludo = "BUENOS DÍAS";
+		saludo = "Buenos Días";
 	} else if (horaActual >= 12 && horaActual < 19) {
-		saludo = "BUENAS TARDES";
+		saludo = "Buenas Tardes";
 	} else {
-		saludo = "BUENAS NOCHES";
+		saludo = "Buenas Noches";
 	}
 
 	return { horaActual, saludo };
