@@ -13,6 +13,8 @@ Finanzas App es una solución moderna para mantener un registro claro de la econ
 - **Gráficos Interactivos**: Mejoras visuales significativas en la pantalla de estadísticas, con gráficos de líneas por usuario y gráficos de torta por categoría.
 - **Documentación Completa**: Todos los archivos clave cuentan con comentarios descriptivos en español (**JSDoc**) para facilitar la comprensión de la lógica.
 - **Consistencia de Datos**: Integración robusta con **React Query** para el manejo de caché y sincronización en tiempo real con el backend.
+- **Actualizaciones Over-The-Air (OTA)**: Implementación de **Expo Updates** para enviar mejoras a los dispositivos de forma instantánea sin necesidad de reinstalar el APK.
+- **Seguridad de Datos (RLS)**: Políticas de seguridad a nivel de fila en Supabase para garantizar que cada usuario solo acceda a sus propios datos.
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -30,7 +32,18 @@ Finanzas App es una solución moderna para mantener un registro claro de la econ
 - **`components/`**: Componentes reutilizables.
 - **`hooks/`**: Lógica de negocio (Hooks SOLID).
 - **`store/`**: Estados globales de la aplicación.
+- **`eas.json`**: Configuración de los perfiles de construcción y canales de actualización.
+- **`.npmrc`**: Configuración crítica para la compatibilidad de `pnpm` con Expo/Babel.
 - **`PROJECT_GUIDE.md`**: Guía técnica detallada sobre la arquitectura y funcionalidades.
+
+## 🚀 Comandos Rápidos
+
+| Acción | Comando |
+| :--- | :--- |
+| **💻 Desarrollo** | `pnpm start` |
+| **⚡ Actualizar App (OTA)** | `pnpm dlx eas-cli update --branch main --platform android --message "Tu mensaje"` |
+| **📦 Crear nuevo APK** | `pnpm dlx eas-cli build --profile production --platform android` |
+| **🧹 Limpiar librerías** | `Remove-Item -Recurse -Force node_modules; pnpm install` |
 
 ## ⚡ Instalación y Ejecución Local
 
@@ -52,3 +65,43 @@ Finanzas App es una solución moderna para mantener un registro claro de la econ
 
 ---
 Desarrollado con ❤️ usando React Native & Expo.
+
+## 🚀 Flujo de Desarrollo y Despliegue
+
+Este proyecto utiliza un sistema de **Actualizaciones Instantáneas (OTA)** para agilizar el mantenimiento.
+
+### 1. Desarrollo (Local)
+Para trabajar en nuevas funciones:
+```powershell
+pnpm start
+```
+*Usa el APK de "Development Build" para previsualizar cambios en tiempo real.*
+
+### 2. Producción (Envío a la familia)
+Para enviar actualizaciones a todos los dispositivos instalados:
+```powershell
+pnpm dlx eas-cli update --branch main --platform android --message "Descripción del cambio"
+```
+*La app descargará automáticamente el nuevo código al abrirse.*
+
+### 3. Cambio de Versión Nativa
+Solo es necesario generar un nuevo APK si se instalan librerías con código nativo o si se cambia la `version` en `app.json`:
+```powershell
+pnpm dlx eas-cli build --profile production --platform android
+```
+
+## 🔒 Seguridad (Supabase RLS)
+
+Se han implementado políticas de **Row Level Security (RLS)** para proteger la integridad de los datos:
+- **Aislamiento de Usuarios**: Cada usuario solo tiene permisos de `SELECT`, `INSERT`, `UPDATE` y `DELETE` sobre registros donde `user_id = auth.uid()`.
+- **Roles Administrativos**: Solo los usuarios con `role = 'admin'` en la tabla `profiles` pueden gestionar categorías globales.
+- **Funciones Protegidas**: Las funciones de base de datos están revocadas para el rol `public` y solo son ejecutables por servicios autorizados.
+
+## ⚠️ Notas de Instalación (pnpm)
+
+Para garantizar la visibilidad de los módulos de Babel y Expo al usar `pnpm`, el proyecto requiere la siguiente configuración en `.npmrc`:
+```text
+node-linker=hoisted
+shamefully-hoist=true
+```
+Si experimentas errores de "Module not found", elimina la carpeta `node_modules` y ejecuta `pnpm install` para reconstruir la estructura plana.

@@ -5,6 +5,7 @@ export type User = {
 	id: string;
 	email: string;
 	displayName?: string;
+	avatarUrl?: string;
 } | null;
 
 type AuthStore = {
@@ -21,6 +22,7 @@ type AuthStore = {
 	signOut: () => Promise<void>;
 	fetchSession: () => Promise<void>;
 	initializeAuth: () => void;
+	updateAvatar: (url: string) => void;
 };
 
 /**
@@ -37,13 +39,21 @@ export const useAuthStore = create<AuthStore>((set) => ({
 	 * Configura el listener de cambios de autenticación de Supabase.
 	 */
 	initializeAuth: () => {
-		supabase.auth.onAuthStateChange((_event, session) => {
+		supabase.auth.onAuthStateChange(async (_event, session) => {
 			if (session?.user) {
+				// Intentar obtener el avatar_url de la tabla profiles
+				const { data: profile } = await supabase
+					.from("profiles")
+					.select("avatar_url")
+					.eq("id", session.user.id)
+					.single();
+
 				set({
 					user: {
 						id: session.user.id,
 						email: session.user.email!,
 						displayName: session.user.user_metadata?.full_name,
+						avatarUrl: profile?.avatar_url,
 					},
 					status: "authenticated",
 				});
@@ -122,16 +132,32 @@ export const useAuthStore = create<AuthStore>((set) => ({
 	fetchSession: async () => {
 		const { data } = await supabase.auth.getSession();
 		if (data.session) {
+			const { data: profile } = await supabase
+				.from("profiles")
+				.select("avatar_url")
+				.eq("id", data.session.user.id)
+				.single();
+
 			set({
 				user: {
 					id: data.session.user.id,
 					email: data.session.user.email!,
 					displayName: data.session.user.user_metadata?.full_name,
+					avatarUrl: profile?.avatar_url,
 				},
 				status: "authenticated",
 			});
 		} else {
 			set({ status: "unauthenticated" });
 		}
+	},
+
+	/**
+	 * Actualiza localmente la URL del avatar en el store.
+	 */
+	updateAvatar: (url: string) => {
+		set((state) => ({
+			user: state.user ? { ...state.user, avatarUrl: url } : null,
+		}));
 	},
 }));
