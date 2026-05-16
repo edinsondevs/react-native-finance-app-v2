@@ -2,33 +2,45 @@ import { ButtomComponent, InputComponent, LinkComponent, ModalsAlerts } from "@/
 import * as Linking from "expo-linking";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert, Text, View } from "react-native";
+import { Alert, Pressable, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useAuthStore } from "../../store/useAuthStore";
+import { useBiometrics } from "../../hooks/useBiometrics";
 
 import { Colors } from "@/styles/constants";
+import { Ionicons } from "@expo/vector-icons";
 
 const LoginScreen = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const { signIn, loading } = useAuthStore();
+	const { signIn, loading, enableBiometrics, checkBiometrics } = useAuthStore();
+	const { isAvailable, handleBiometricLogin } = useBiometrics();
+	const [biometricsSupported, setBiometricsSupported] = useState(false);
 
-	// Efecto para detectar si venimos de un reset de contraseña
 	useEffect(() => {
+		const initBiometrics = async () => {
+			const available = await isAvailable();
+			setBiometricsSupported(available);
+			
+			// Si está disponible, intentar loguear automáticamente al abrir
+			if (available) {
+				const success = await handleBiometricLogin();
+				if (success) router.replace("/(tabs)/gastos");
+			}
+		};
+		initBiometrics();
+
+		// Lógica de Deep Linking (Recuperación de contraseña)
 		const checkDeepLink = async () => {
 			const url = await Linking.getInitialURL();
 			if (url) handleUrl(url);
 		};
 
 		const handleUrl = (url: string) => {
-			// Si la URL tiene access_token, es probable que sea un reset de password
 			if (url.includes("access_token") && url.includes("refresh_token")) {
-				// Extraer tokens manualmente
 				let accessToken = null;
 				let refreshToken = null;
-
-				// Intentar parsear fragmento o query
-				const safeUrl = url.includes("#") ? url : url.replace("?", "#"); // Normalizar a hash si es necesario
+				const safeUrl = url.includes("#") ? url : url.replace("?", "#");
 				if (safeUrl.includes("#")) {
 					const fragment = safeUrl.split("#")[1];
 					const params = new URLSearchParams(fragment);
@@ -39,10 +51,7 @@ const LoginScreen = () => {
 				if (accessToken && refreshToken) {
 					router.replace({
 						pathname: "/login/updatePassword",
-						params: {
-							access_token: accessToken,
-							refresh_token: refreshToken,
-						},
+						params: { access_token: accessToken, refresh_token: refreshToken },
 					});
 				}
 			}
@@ -65,9 +74,33 @@ const LoginScreen = () => {
 		if (error) {
 			Alert.alert("Error al iniciar sesión", error);
 		} else if (user) {
-			router.replace("/(tabs)/gastos");
+			// Preguntar si quiere habilitar biometría si no lo ha hecho
+			const isEnabled = await checkBiometrics();
+			if (!isEnabled) {
+				Alert.alert(
+					"Seguridad",
+					"¿Deseas habilitar el inicio de sesión con huella para la próxima vez?",
+					[
+						{ text: "No", style: "cancel", onPress: () => router.replace("/(tabs)/gastos") },
+						{ 
+							text: "Sí, activar", 
+							onPress: async () => {
+								await enableBiometrics(password);
+								router.replace("/(tabs)/gastos");
+							} 
+						}
+					]
+				);
+			} else {
+				router.replace("/(tabs)/gastos");
+			}
 		}
 	}
+
+	const onBiometricPress = async () => {
+		const success = await handleBiometricLogin();
+		if (success) router.replace("/(tabs)/gastos");
+	};
 
 	return (
 		<View className='flex-1'>
@@ -119,17 +152,28 @@ const LoginScreen = () => {
 						onPress={() => router.push("/login/resetPassword")}
 					/>
 
-					<View className='mt-4 items-center'>
-						<ButtomComponent
-							disabled={loading || !email || !password}
-							color={
-								loading || !email || !password
-									? "bg-button-disabled"
-									: "bg-primary"
-							}
-							onPressFunction={onPressFunction}
-							text={loading ? "Cargando..." : "Iniciar Sesión"}
-						/>
+					<View className='mt-4 flex-row items-center gap-4'>
+						<View className="flex-1">
+							<ButtomComponent
+								disabled={loading || !email || !password}
+								color={
+									loading || !email || !password
+										? "bg-button-disabled"
+										: "bg-primary"
+								}
+								onPressFunction={onPressFunction}
+								text={loading ? "Cargando..." : "Iniciar Sesión"}
+							/>
+						</View>
+						
+						{biometricsSupported && (
+							<Pressable 
+								onPress={onBiometricPress}
+								className="p-3 bg-secondary/10 rounded-2xl border border-secondary/20"
+							>
+								<Ionicons name="finger-print" size={32} color={Colors.secondary} />
+							</Pressable>
+						)}
 					</View>
 				</View>
 

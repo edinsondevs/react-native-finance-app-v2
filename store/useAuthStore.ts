@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { supabase } from "../api/lib/supabase";
+import * as SecureStore from "expo-secure-store";
 
 export type User = {
 	id: string;
@@ -23,6 +24,9 @@ type AuthStore = {
 	fetchSession: () => Promise<void>;
 	initializeAuth: () => void;
 	updateAvatar: (url: string) => void;
+	enableBiometrics: (password: string) => Promise<void>;
+	disableBiometrics: () => Promise<void>;
+	checkBiometrics: () => Promise<boolean>;
 };
 
 export const useAuthStore = create<AuthStore>((set) => ({
@@ -143,5 +147,34 @@ export const useAuthStore = create<AuthStore>((set) => ({
 		set((state) => ({
 			user: state.user ? { ...state.user, avatarUrl: url } : null,
 		}));
+	},
+
+	/**
+	 * Habilita la biometría guardando las credenciales en SecureStore.
+	 */
+	enableBiometrics: async (password: string) => {
+		const { user } = useAuthStore.getState();
+		if (!user) return;
+
+		await SecureStore.setItemAsync("user_email", user.email);
+		await SecureStore.setItemAsync("user_password", password);
+		await SecureStore.setItemAsync("biometrics_enabled", "true");
+	},
+
+	/**
+	 * Deshabilita la biometría.
+	 */
+	disableBiometrics: async () => {
+		await SecureStore.deleteItemAsync("user_email");
+		await SecureStore.deleteItemAsync("user_password");
+		await SecureStore.setItemAsync("biometrics_enabled", "false");
+	},
+
+	/**
+	 * Verifica si la biometría está habilitada en este dispositivo.
+	 */
+	checkBiometrics: async () => {
+		const enabled = await SecureStore.getItemAsync("biometrics_enabled");
+		return enabled === "true";
 	},
 }));
