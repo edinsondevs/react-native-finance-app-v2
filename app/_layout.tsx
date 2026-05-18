@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { TourGuideProvider } from "rn-tourguide";
 import dayjs from "dayjs";
 import "dayjs/locale/es"; // Importar el idioma español
 import { useFonts } from "expo-font";
@@ -61,12 +62,21 @@ export default function RootLayout() {
 	}
 
 	return (
-		<SafeAreaProvider initialMetrics={initialWindowMetrics}>
-			<QueryClientProvider client={queryClient}>
-				<SafeAreaView
-					style={{ flex: 1 }}
-					edges={["top", "right", "left"]}>
-					<Stack>
+		<TourGuideProvider
+			verticalOffset={40}
+			labels={{
+				skip: "Saltar",
+				previous: "Atrás",
+				next: "Siguiente",
+				finish: "Entendido"
+			}}
+		>
+			<SafeAreaProvider initialMetrics={initialWindowMetrics}>
+				<QueryClientProvider client={queryClient}>
+					<SafeAreaView
+						style={{ flex: 1 }}
+						edges={["top", "right", "left"]}>
+						<Stack>
 						<Stack.Screen
 							name='index'
 							options={{
@@ -107,5 +117,6 @@ export default function RootLayout() {
 				</SafeAreaView>
 			</QueryClientProvider>
 		</SafeAreaProvider>
+		</TourGuideProvider>
 	);
 }

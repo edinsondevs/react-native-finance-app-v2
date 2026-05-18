@@ -10,7 +10,7 @@ import { usePathname } from "expo-router";
 import { useAuthStore } from "@/store/useAuthStore";
 import { uploadAvatarService } from "@/api/services/usuarios/profile.service";
 
-const HeaderComponent = ({ title, icon = false }: InterfaceHeaderComponentProps) => {
+const HeaderComponent = ({ title, icon = false, onPressHelp }: InterfaceHeaderComponentProps) => {
 	const { toogleVisualization, setToogleVisualization } = useToogleVisualization();
 	const { user, updateAvatar } = useAuthStore();
 	const [uploading, setUploading] = useState(false);
@@ -75,7 +75,19 @@ const HeaderComponent = ({ title, icon = false }: InterfaceHeaderComponentProps)
 				<Text className='text-2xl self-center font-bold mb-6 mt-4 px-4 text-primary'>
 					{title}
 				</Text>
-				{ pathname !== "/ajustes" && <Pressable className="absolute right-6" onPress={() => setToogleVisualization(!toogleVisualization)}>
+				{onPressHelp && (
+					<Pressable 
+						className="absolute right-16 active:opacity-75" 
+						onPress={onPressHelp}
+					>
+						<Ionicons
+							name="help-circle-outline"
+							size={26}
+							color="#3b82f6"
+						/>
+					</Pressable>
+				)}
+				{ (pathname === "/gastos" || pathname === "/ingresos" || pathname === "/estadisticas" || pathname === "/historial") && <Pressable className="absolute right-6" onPress={() => setToogleVisualization(!toogleVisualization)}>
 					<Ionicons
 						name={toogleVisualization ? "eye" : "eye-off-sharp"}
 						size={24}

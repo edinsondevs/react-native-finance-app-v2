@@ -118,6 +118,7 @@ export interface InterfaceDateTimePickerComponentProps {
 export interface InterfaceHeaderComponentProps {
 	title: string;
 	icon?: boolean;
+	onPressHelp?: () => void;
 }
 
 /*

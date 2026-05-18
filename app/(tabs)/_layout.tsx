@@ -1,5 +1,6 @@
 import { colors } from "@/styles/constants";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Tabs } from "expo-router";
 
 export default function TabLayout() {
@@ -67,6 +68,19 @@ export default function TabLayout() {
 						<FontAwesome
 							size={28}
 							name='history'
+							color={color}
+						/>
+					),
+				}}
+			/>
+			<Tabs.Screen
+				name='fijos'
+				options={{
+					title: "G. Fijos",
+					tabBarIcon: ({ color }) => (
+						<FontAwesome6
+							size={28}
+							name='money-bill-trend-up'
 							color={color}
 						/>
 					),

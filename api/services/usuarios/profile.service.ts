@@ -38,11 +38,13 @@ export const uploadAvatarService = async (
 
 		const publicUrl = urlData.publicUrl;
 
-		// 3. Actualizar la tabla profiles con la nueva URL
+		// 3. Actualizar o crear el registro en la tabla profiles con la nueva URL usando upsert
 		const { error: updateError } = await supabase
 			.from("profiles")
-			.update({ avatar_url: publicUrl })
-			.eq("id", userId);
+			.upsert({ 
+				id: userId, 
+				avatar_url: publicUrl 
+			});
 
 		if (updateError) throw updateError;
 
