@@ -78,11 +78,11 @@ pnpm start
 *Usa el APK de "Development Build" para previsualizar cambios en tiempo real.*
 
 ### 2. Producción (Envío a la familia)
-Para enviar actualizaciones a todos los dispositivos instalados:
+Para enviar actualizaciones instantáneas (OTA) a todos los dispositivos instalados:
 ```powershell
-pnpm dlx eas-cli update --branch main --platform android --message "Descripción del cambio"
+pnpm update:app "Descripción del cambio"
 ```
-*La app descargará automáticamente el nuevo código al abrirse.*
+*La app descargará automáticamente el nuevo código la próxima vez que se abra.*
 
 ### 3. Cambio de Versión Nativa
 Solo es necesario generar un nuevo APK si se instalan librerías con código nativo o si se cambia la `version` en `app.json`:

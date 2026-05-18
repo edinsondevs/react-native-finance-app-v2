@@ -14,6 +14,7 @@ import {
 import "../global.css";
 
 import { useAuthStore } from "../store/useAuthStore";
+import { Colors } from "../styles/constants";
 
 // Configurar dayjs a español globalmente
 dayjs.locale("es");
@@ -64,6 +65,13 @@ export default function RootLayout() {
 	return (
 		<TourGuideProvider
 			verticalOffset={40}
+			tooltipStyle={{
+				backgroundColor: "#f3f4f6", // Hermoso gris claro suave
+				borderWidth: 2,
+				borderColor: Colors.primary, // Borde del color azul primario de la app
+				borderRadius: 16,
+				padding: 8,
+			}}
 			labels={{
 				skip: "Saltar",
 				previous: "Atrás",

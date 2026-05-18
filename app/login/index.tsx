@@ -4,6 +4,7 @@ import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { LinearGradient } from "expo-linear-gradient";
 import { useAuthStore } from "../../store/useAuthStore";
 import { useBiometrics } from "../../hooks/useBiometrics";
 
@@ -103,7 +104,11 @@ const LoginScreen = () => {
 	};
 
 	return (
-		<View className='flex-1'>
+		<LinearGradient
+			colors={["#f8fafc", "#eef2ff", "#e0e7ff"]}
+			style={{ flex: 1 }}
+			className="flex-1"
+		>
 			<ModalsAlerts
 				visible={loading}
 				color={Colors.primary}
@@ -118,17 +123,37 @@ const LoginScreen = () => {
 					justifyContent: "center",
 					alignItems: "center",
 					width: "100%",
+					paddingVertical: 40,
 				}}
 				showsVerticalScrollIndicator={false}
 				enableOnAndroid={true}>
-				<View className='mb-4 max-w-xs  '>
-					<Text className='text-4xl text-center font-Nunito-ExtraBold '>
-						App de Finanzas Personales
+				
+				{/* Encabezado Principal con Icono */}
+				<View className='mb-6 items-center'>
+					<View className="w-16 h-16 rounded-3xl bg-primary/10 items-center justify-center mb-4 shadow-sm">
+						<Ionicons name="wallet-outline" size={36} color={Colors.primary} />
+					</View>
+					<Text className='text-3xl text-center font-Nunito-ExtraBold text-slate-800 px-4'>
+						Finanzas Personales
+					</Text>
+					<Text className='text-sm text-center font-Inter-Medium text-slate-500 mt-1 px-4'>
+						Gestiona tus ingresos y gastos de forma inteligente
 					</Text>
 				</View>
-				<View className='gap-4 w-full px-6 mt-8'>
-					<Text className='text-text-gray font-Inter-ExtraBold'>
-						Correo Eléctronico
+
+				{/* Tarjeta del Formulario Premium */}
+				<View 
+					className='bg-white/85 border border-white/60 p-6 rounded-3xl w-[90%] shadow-lg gap-4'
+					style={{
+						shadowColor: "#000",
+						shadowOffset: { width: 0, height: 4 },
+						shadowOpacity: 0.05,
+						shadowRadius: 12,
+						elevation: 3,
+					}}
+				>
+					<Text className='text-slate-600 font-Inter-ExtraBold text-xs uppercase tracking-wider mb-[-4px]'>
+						Correo Electrónico
 					</Text>
 					<InputComponent
 						value={email}
@@ -137,7 +162,8 @@ const LoginScreen = () => {
 						placeholder='Introduce tu correo electrónico'
 						keyboardType='email-address'
 					/>
-					<Text className='text-text-gray font-Inter-ExtraBold'>
+					
+					<Text className='text-slate-600 font-Inter-ExtraBold text-xs uppercase tracking-wider mb-[-4px]'>
 						Contraseña
 					</Text>
 					<InputComponent
@@ -152,7 +178,7 @@ const LoginScreen = () => {
 						onPress={() => router.push("/login/resetPassword")}
 					/>
 
-					<View className='mt-4 flex-row items-center gap-4'>
+					<View className='mt-2 flex-row items-center gap-3'>
 						<View className="flex-1">
 							<ButtomComponent
 								disabled={loading || !email || !password}
@@ -169,7 +195,7 @@ const LoginScreen = () => {
 						{biometricsSupported && (
 							<Pressable 
 								onPress={onBiometricPress}
-								className="p-3 bg-secondary/10 rounded-2xl border border-secondary/20"
+								className="p-3 bg-secondary/10 rounded-2xl border border-secondary/20 active:bg-secondary/20"
 							>
 								<Ionicons name="finger-print" size={32} color={Colors.secondary} />
 							</Pressable>
@@ -177,8 +203,9 @@ const LoginScreen = () => {
 					</View>
 				</View>
 
-				<View className='mt-6 flex-row justify-center items-center gap-2'>
-					<Text className='text-text-gray font-Inter-Medium'>
+				{/* Footer de Registro */}
+				<View className='mt-8 flex-row justify-center items-center gap-2 bg-white/60 py-2.5 px-6 rounded-full border border-white/40 shadow-sm'>
+					<Text className='text-slate-500 font-Inter-Medium text-sm'>
 						¿No tienes una cuenta?
 					</Text>
 					<LinkComponent
@@ -187,7 +214,7 @@ const LoginScreen = () => {
 					/>
 				</View>
 			</KeyboardAwareScrollView>
-		</View>
+		</LinearGradient>
 	);
 };
 
