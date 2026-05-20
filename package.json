@@ -11,6 +11,7 @@
     "lint": "expo lint",
     "build:android": "eas build --platform android --profile production",
     "build:preview": "eas build --platform android --profile preview",
+    "build:app": "pnpm dlx eas-cli build --profile production --platform android",
     "build:apk:local": "npx expo prebuild --platform android && cd android && gradlew assembleRelease",
     "update:app": "pnpm dlx eas-cli update --branch main --platform android --message"
   },

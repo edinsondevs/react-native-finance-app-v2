@@ -1,11 +1,12 @@
 import { instance } from "@/api/apiService";
 
 //* Crear un nuevo servicio mensual
-export const postServiciosMensualesServices = async (name: string) => {
+export const postServiciosMensualesServices = async (name: string, user_id?: string) => {
 	try {
 		const response = await instance.post("/servicios_mensuales", {
 			name,
-			estado: 'Pendiente'
+			estado: 'Pendiente',
+			user_id,
 		});
 		return response.data;
 	} catch (error) {
