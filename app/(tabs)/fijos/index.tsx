@@ -86,7 +86,7 @@ const GastosFijosScreen = () => {
 
 	const createMutation = useMutation({
 		mutationFn: (name: string) =>
-			postServiciosMensualesServices(name, user?.id),
+			postServiciosMensualesServices(name),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ['servicios_mensuales'],
